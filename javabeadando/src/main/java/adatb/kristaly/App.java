@@ -27,7 +27,7 @@ public class App
         dbservice.checkTables(conndb);
 
         Menu fomenu = new Menu();
-        fomenu.addMenuItem("Emberek kezelése");
+        fomenu.addMenuItem("Vendégek kezelése");
         fomenu.addMenuItem("Szobak kezelése");
         fomenu.addMenuItem("Programok kezelése");
         fomenu.addMenuItem("Minden adat törlése");

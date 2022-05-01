@@ -24,7 +24,7 @@ public class ProgramMenu {
         almenu.addMenuItem("Vendég leiratkoztatás");
         almenu.addMenuItem("Programok");
         almenu.addMenuItem("Aktuális programok");
-        almenu.addMenuItem("Programre regisztraltak listaja");
+        almenu.addMenuItem("Programra regisztraltak listaja");
         almenu.addBackButton("VISSZA");
     }
 
