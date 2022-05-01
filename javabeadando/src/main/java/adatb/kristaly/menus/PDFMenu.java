@@ -2,8 +2,10 @@ package adatb.kristaly.menus;
 
 import adatb.kristaly.domain.Menu;
 import adatb.kristaly.services.PDFService;
+import adatb.kristaly.services.ProgramService;
 
 import java.sql.Connection;
+import java.util.Scanner;
 
 public class PDFMenu {
     private Connection conn;
@@ -23,6 +25,29 @@ public class PDFMenu {
 
     public void createGuestPDF() {
         PDFService pdfSer = new PDFService(conn);
-        pdfSer.createPDF("elso");
+        pdfSer.createGuestPDF("elso");
     }
+
+    public void createProgramPDF() {
+        PDFService pdfSer = new PDFService(conn);
+        ProgramService pS = new ProgramService(conn);
+        Scanner sc = new Scanner(System.in);
+        int pick;
+        boolean okay = false;
+        do{
+            System.out.print("Adja meg melyik programból készüljön dokumentum: ");
+            try {
+                pick = sc.nextInt();
+                if(pS.eventExists(pick)){
+                    pdfSer.createProgramPDF("programok", pick);
+                    okay = true;
+                }
+            }catch (Exception e){
+                System.out.println("Szamot adj meg");
+            }
+
+        }while (!okay);
+
+    }
+
 }

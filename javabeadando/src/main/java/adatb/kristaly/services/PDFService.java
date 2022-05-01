@@ -1,6 +1,7 @@
 package adatb.kristaly.services;
 
 import adatb.kristaly.domain.Ember;
+import adatb.kristaly.domain.Program;
 import com.itextpdf.barcodes.BarcodePDF417;
 import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -30,7 +31,7 @@ public class PDFService {
         this.conn = conn;
     }
 
-    public void createPDF(String pdfname){
+    public void createGuestPDF(String pdfname){
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmm");
         Date date = new Date();
         String datumstring = "Vendegek"+formatter.format(date) + ".pdf";
@@ -41,6 +42,17 @@ public class PDFService {
 
 
         this.makeUserTablePDF(DEST);
+        //new PDFService().manipulatePdf(DEST);
+    }
+    public void createProgramPDF(String pdfname,int programID){
+        String datumstring = "Program"+ programID + ".pdf";
+        DEST = DEST.concat(datumstring);
+        System.out.println(DEST);
+        File file = new File(DEST);
+        file.getParentFile().mkdirs();
+
+
+        this.makeProgramPDF(DEST,programID);
         //new PDFService().manipulatePdf(DEST);
     }
 
@@ -76,6 +88,53 @@ public class PDFService {
             } catch (Exception e) {
 
             }
+
+    }
+
+    private void makeProgramPDF(String dest, int programID) {
+        ProgramService programService = new ProgramService(conn);
+        List<Ember> emberList = programService.getProgramGuestList(programID);
+        Program program = programService.getEventInfos(programID);
+
+        try {
+            PdfDocument pdfDoc = new PdfDocument(new PdfWriter(dest));
+            Document doc = new Document(pdfDoc);
+            doc.setMargins(20, 50, 20, 50);
+
+            float[]  detailscolwidth = {20,30,25,25};
+            Table table = new Table(UnitValue.createPercentArray(detailscolwidth)).useAllAvailableWidth();
+            Cell cim = new Cell(1, 4).setTextAlignment(TextAlignment.CENTER).add(new Paragraph(program.getProgramName()));
+
+            table.addHeaderCell(cim);
+            table.addCell(new Cell().setTextAlignment(TextAlignment.CENTER).add(new Paragraph(String.valueOf(program.getProgramID()))));
+            table.addCell(new Cell().setTextAlignment(TextAlignment.CENTER).add(new Paragraph(String.valueOf(program.getProgramStart().toString()))));
+            table.addCell(new Cell().setTextAlignment(TextAlignment.CENTER).add(new Paragraph(program.getDuration() + "perc")));
+            table.addCell(new Cell().setTextAlignment(TextAlignment.CENTER).add(new Paragraph( "max " + program.getMaxPerson())));
+            doc.add(table);
+
+            float[] columnWidths = {30, 40, 30};
+            Table table2 = new Table(UnitValue.createPercentArray(columnWidths)).useAllAvailableWidth();
+            //table.setWidth(pdfDoc.getDefaultPageSize().getWidth() - 80);
+            Cell cim2 = new Cell(1, 3).setTextAlignment(TextAlignment.CENTER).add(new Paragraph("Regisztrált vendégek"));
+
+            table2.addHeaderCell(cim2);
+            table2.addCell(new Cell().add(new Paragraph("ID")));
+            table2.addCell(new Cell().add(new Paragraph("Név")));
+            table2.addCell(new Cell().add(new Paragraph("Szoba")));
+
+            Iterator<Ember> iter = emberList.iterator();
+            while (iter.hasNext()) {
+                Ember ember = iter.next();
+                table2.addCell(new Cell().add(new Paragraph(String.valueOf(ember.getID()))));
+                table2.addCell(new Cell().add(new Paragraph(ember.getLastname() + " " + ember.getFirstname())));
+                table2.addCell(new Cell().setTextAlignment(TextAlignment.CENTER).add(new Paragraph(String.valueOf(ember.getRoomID()))));
+            }
+
+            doc.add(table2);
+            doc.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
     }
 

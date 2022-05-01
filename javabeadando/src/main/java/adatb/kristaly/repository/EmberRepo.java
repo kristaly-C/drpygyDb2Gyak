@@ -37,11 +37,11 @@ public class EmberRepo {
     System.out.println("Kész!");
 }
 
-public List<Ember> getAllPerson(){
+public List<Ember> getAllActivePerson(){
     List<Ember> emberek = new ArrayList<>();
     try {
         Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT * FROM EMBEREK ORDER BY roomid ASC");
+        ResultSet rs = stmt.executeQuery("SELECT * FROM EMBEREK WHERE roomid <> -1 ORDER BY roomid ASC");
         while (rs.next()){
             Ember ember = new Ember(
                     rs.getInt("id"),
@@ -56,7 +56,7 @@ public List<Ember> getAllPerson(){
         rs.close();
         stmt.close();
     }catch (SQLException sqle){
-        return null;
+        return emberek;
     }
     return emberek;
 }
@@ -128,12 +128,14 @@ public int insertPerson(Ember person){
         }
     }
 
-    public int deleteEmber(int id) {
+    public int switchUserRoom(int id, int targetroom) {
         try {
-            PreparedStatement prstmt = conn.prepareStatement("DELETE EMBEREK WHERE EMBEREK.ID = ?");
-            prstmt.setInt(1,id);
+            PreparedStatement prstmt = conn.prepareStatement("UPDATE EMBEREK SET roomid = ? WHERE id = ?");
+            prstmt.setInt(1,targetroom);
+            prstmt.setInt(2,id);
             return prstmt.executeUpdate();
         }catch (SQLException e){
+            System.err.println(e.getLocalizedMessage());
             return 0;
         }
     }

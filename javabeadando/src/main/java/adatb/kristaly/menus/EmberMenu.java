@@ -17,7 +17,7 @@ public class EmberMenu {
     public EmberMenu(Connection connection){
         this.conn = connection;
         almenu.addMenuItem("Új vendég felvétele");
-        almenu.addMenuItem("Vendég törlése");
+        almenu.addMenuItem("Vendég kijelentkeztetése");
         almenu.addMenuItem("Vendégek listája");
         almenu.addBackButton("VISSZA");
     }
@@ -135,7 +135,7 @@ public class EmberMenu {
         emberService.showAllPerson();
     }
 
-    public void deletePeople() {
+    public void logoutPeople() {
         boolean isnum = false;
         EmberService emberService = new EmberService(conn);
         SzobaService szobaService = new SzobaService(conn);
@@ -162,9 +162,8 @@ public class EmberMenu {
                 if(userid == -1){return;}
                 if(emberService.userInTable(userid)){
                     Ember vendeg = emberService.getEmberByID(userid);
-                    emberService.delUser(userid);
-
-                    szobaService.increaseFreeSlot(vendeg.getRoomID());
+                    emberService.switchRoom(userid, -1);
+                    //szobaService.increaseFreeSlot(vendeg.getRoomID());
                     isnum = true;
                 }else {
                     System.out.println("Nincs vendég ezzel az azonosítóval.");
@@ -175,7 +174,9 @@ public class EmberMenu {
             }
 
         }while (!isnum);
+        }else {
+            System.out.println("Nincsenek vendégek regisztrálva");
         }
-        System.out.println("Nincsenek vendégek regisztrálva");
+
     }
 }

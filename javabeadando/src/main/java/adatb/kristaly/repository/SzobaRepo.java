@@ -29,7 +29,7 @@ public class SzobaRepo {
                     "  CONSTRAINT chk_free CHECK (freeslot <= maxpeople)\n" +
                     ")");
             stmt.close();
-
+            insertRoom(new Szoba(-1,10000,0,0,10000));
         }catch (SQLException sqle){
             System.out.println(sqle.getMessage());
             System.out.println(sqle.getSQLState() + " " + sqle.getErrorCode());
@@ -58,7 +58,7 @@ public class SzobaRepo {
         List<Szoba> szobak = new ArrayList<>();
         try {
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM SZOBAK");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM SZOBAK WHERE id <> -1");
             while (rs.next()){
              Szoba szoba = new Szoba(
                      rs.getInt("id"),
@@ -111,7 +111,7 @@ public class SzobaRepo {
     public List<Szoba> getSzobakWhereFreeSlot(int bed){
         List<Szoba> szobak = new ArrayList<>();
         try {
-            PreparedStatement prstmt = conn.prepareStatement("SELECT * FROM SZOBAK WHERE freeslot >= ?");
+            PreparedStatement prstmt = conn.prepareStatement("SELECT * FROM SZOBAK WHERE freeslot >= ? AND id <> -1");
             prstmt.setInt(1,bed);
             ResultSet rs = prstmt.executeQuery();
             while (rs.next()){

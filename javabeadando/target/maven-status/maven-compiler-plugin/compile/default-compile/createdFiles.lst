@@ -15,6 +15,7 @@ adatb\kristaly\App.class
 adatb\kristaly\domain\Ember.class
 adatb\kristaly\menus\EmberMenu.class
 adatb\kristaly\domain\Menu.class
+adatb\kristaly\menus\ProgramMenu.class
 adatb\kristaly\domain\MenuLine.class
 adatb\kristaly\interfaces\DbInterface.class
 adatb\kristaly\repository\ProgramRepo.class

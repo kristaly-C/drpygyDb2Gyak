@@ -94,45 +94,53 @@ public class SzobaMenu {
     public void deleteSzoba(){
         SzobaService szS = new SzobaService(conn);
         Scanner sc = new Scanner(System.in);
-        int roomID;
-        //Mennyi szobat akar törölni
-        System.out.println("Egy adatot vagy többet akar törölni?");
-        Menu delmenu = new Menu();
-        delmenu.addMenuItem("Egy szobát akarok törölni ID alapján. (csak üres szobát)");
-        delmenu.addMenuItem("Minden szobát törölni akarok. (csak ha minden szoba üres)");
-        delmenu.drawVisibleMenu();
-        switch (delmenu.pickItem()){
-            //Egy szoba törlése
-            case 1 :
-                System.out.print("Adja meg a szoba szamat: ");
-                try {
-                    roomID = sc.nextInt();
-                }catch (Exception e){
-                    System.out.println("Ezzel az azonosítóval biztosan nincs szoba regisztrálva." );
-                    return;
-                }
-                if(szS.isSzobaEmpty(roomID)){
-                   szS.deleteSzoba(roomID);
-                }
-                break;
-            //Minden szoba törlése
-            case 2 : System.out.println("Biztos?");
+        int szobak = szS.howManySzoba();
+        if (szobak > 0) {
+            int roomID;
+            //Mennyi szobat akar törölni
+            System.out.println("Egy adatot vagy többet akar törölni?");
+            Menu delmenu = new Menu();
+            delmenu.addMenuItem("Egy szobát akarok törölni ID alapján. (csak üres szobát)");
+            delmenu.addMenuItem("Minden szobát törölni akarok. (csak ha minden szoba üres)");
+            delmenu.drawVisibleMenu();
+            switch (delmenu.pickItem()) {
+                //Egy szoba törlése
+                case 1:
+                    System.out.print("Adja meg a szoba szamat: ");
+                    try {
+                        roomID = sc.nextInt();
+                    } catch (Exception e) {
+                        System.out.println("Ezzel az azonosítóval biztosan nincs szoba regisztrálva.");
+                        return;
+                    }
+                    if (szS.isSzobaEmpty(roomID)) {
+                        szS.deleteSzoba(roomID);
+                    }
+                    break;
+                //Minden szoba törlése
+                case 2:
+                    System.out.println("Biztos?");
                     Menu bmenu = new Menu();
                     bmenu.addMenuItem("Igen");
                     bmenu.addMenuItem("Mégsem");
                     bmenu.drawVisibleMenu();
-                    switch (bmenu.pickItem()){
-                        case 1 : List<Integer> torlendo =  szS.getAllSzoba();
-                                if (torlendo.isEmpty()){
-                                    System.out.println("Minden adat torolve");
-                                }else {
-                                    szS.deleteSzoba(torlendo);
-                                }
+                    switch (bmenu.pickItem()) {
+                        case 1:
+                            List<Integer> torlendo = szS.getAllSzoba();
+                            if (torlendo.isEmpty()) {
+                                System.out.println("Minden adat torolve");
+                            } else {
+                                szS.deleteSzoba(torlendo);
+                            }
                             break;
-                        case 2 :
+                        case 2:
                             break;
                     }
-                break;
+                    break;
+            }
+        }else {
+            System.out.println("Nincsenek szobak");
+            return;
         }
 
     }
@@ -145,16 +153,17 @@ public class SzobaMenu {
     public void getSzobaInfo() {
         Scanner sc = new Scanner(System.in);
         SzobaService szobaService = new SzobaService(conn);
-        int roomID;
 
-        System.out.print("Adja meg a megtekinteni kívánt szoba számát: ");
-        try {
-            roomID = sc.nextInt();
-        }catch (Exception e){
-            System.out.println("Ezzel az azonosítóval biztosan nincs szoba regisztrálva." );
-            return;
-        }
-        szobaService.getSzoba(roomID);
+            int roomID;
+
+            System.out.print("Adja meg a megtekinteni kívánt szoba számát: ");
+            try {
+                roomID = sc.nextInt();
+            } catch (Exception e) {
+                System.out.println("Ezzel az azonosítóval biztosan nincs szoba regisztrálva.");
+                return;
+            }
+            szobaService.getSzoba(roomID);
     }
 
     public void whoAreInSzoba() {

@@ -82,7 +82,7 @@ public class Szoba {
                 "] szabad hely [" + freeslot +
                 "/" + maxperson +
                 "] WC ["  + ((includeWC) ? "van" : "nincs") +
-                "] Shover [" + ((includeShover) ? "van" : "nincs") +
+                "] Shower [" + ((includeShover) ? "van" : "nincs") +
                 "]";
     }
 }

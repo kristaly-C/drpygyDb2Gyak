@@ -44,7 +44,7 @@ public class App
                     switch(eM.getMenu().pickItem()){
                         case 1 : eM.insertNewPerson();
                             break;
-                        case 2 : eM.deletePeople();
+                        case 2 : eM.logoutPeople();
                             break;
                         case 3 : eM.showAllEmber();
                             break;
@@ -74,7 +74,7 @@ public class App
                         }
                     }
                     break;
-                case 3 : boolean exit5 = false;
+                case 3 : boolean exit5 = false;                              //PROGRAMOK
                     while (!exit5){
                         ProgramMenu prM = new ProgramMenu(conndb);
                         prM.getMenu().drawVisibleMenu();
@@ -87,9 +87,11 @@ public class App
                                 break;
                             case 4: prM.showProgramok();
                                 break;
-                            case 5: prM.editProgram();
+                            case 5: prM.actualPPrograms();
                                 break;
-                            case 6: exit5 = true;
+                            case 6: prM.whoRegistratedTheProgram();
+                                break;
+                            case 7: exit5 = true;
                                 break;
                         }
                     }
@@ -121,7 +123,7 @@ public class App
                         switch (pM.getMenu().pickItem()){
                             case 1 : pM.createGuestPDF();
                                 break;
-                            case 2 : System.out.println("Soon...");
+                            case 2 : pM.createProgramPDF();
                                 break;
                             case 3 : exit4 = true;
                                 break;

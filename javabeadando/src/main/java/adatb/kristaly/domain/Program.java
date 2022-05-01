@@ -56,4 +56,19 @@ public class Program {
     public void setMaxPerson(int maxPerson) {
         this.maxPerson = maxPerson;
     }
+
+    public String getProgramStartString() {
+        return this.programStart.getYear() + "-" + this.programStart.getMonth() + "-" + this.programStart.getDay() + " " + this.programStart.getHours() + ":" + this.programStart.getMinutes() +":0";
+    }
+
+    @Override
+    public String toString() {
+        return "Program{" +
+                "programID=" + programID +
+                ", programName='" + programName + '\'' +
+                ", programStart=" + programStart +
+                ", duration=" + duration +
+                ", maxPerson=" + maxPerson +
+                '}';
+    }
 }

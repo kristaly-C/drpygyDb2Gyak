@@ -37,7 +37,7 @@ public class EmberService {
 
     public void showAllPerson(){
         EmberRepo emberRepo = new EmberRepo(conn);
-        List<Ember> emberek = emberRepo.getAllPerson();
+        List<Ember> emberek = emberRepo.getAllActivePerson();
         if (emberek.isEmpty()){
             System.out.println("Üres");
         }else{
@@ -67,12 +67,16 @@ public class EmberService {
         }
     }
 
-    public void delUser(int id) {
+    public void switchRoom(int userID,int targetRoom) {
         EmberRepo emberRepo = new EmberRepo(conn);
-        if(emberRepo.deleteEmber(id) > 0){
-            System.out.println("Sikeres torles");
+        SzobaService szS = new SzobaService(conn);
+        Ember ember  = emberRepo.getPersonbyID(userID);
+        if(emberRepo.switchUserRoom(userID,targetRoom) > 0){
+            szS.increaseFreeSlot(ember.getRoomID());
+            szS.decreaseFreeSlot(targetRoom);
+            System.out.println("Sikeres áthelyezés");
         }else {
-            System.out.println("Sikertelen torles");
+            System.out.println("Sikertelen áthelyezés");
         }
     }
 
@@ -93,6 +97,6 @@ public class EmberService {
 
     public List<Ember> getAllEmber() {
         EmberRepo emberRepo = new EmberRepo(conn);
-        return emberRepo.getAllPerson();
+        return emberRepo.getAllActivePerson();
     }
 }

@@ -173,4 +173,14 @@ public class SzobaService {
         SzobaRepo szobaRepo = new SzobaRepo(connection);
         szobaRepo.dropSzoba();
     }
+
+    public int howManySzoba() {
+        SzobaRepo szobaRepo = new SzobaRepo(connection);
+        int rooms = 0;
+        List<Szoba> szobak = szobaRepo.getAllSzoba();
+        if(!szobak.isEmpty()){
+          rooms = szobak.size();
+        }
+        return rooms;
+    }
 }
